@@ -12,9 +12,11 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        
-        # Installs your launch files
+
+        #adding launch file to install
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
+        #adding urdf to launch file
+        (os.path.join('share', package_name, 'urdf'), glob(os.path.join('urdf', '*.urdf'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -29,7 +31,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            # Maps the executable 'data' to the 'data_reader.py' script inside the 'dead' folder
+
             'data=dead.data_reader:main',
         ],
     },
