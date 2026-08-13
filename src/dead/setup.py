@@ -31,7 +31,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-
+            'Otransform= dead.calc:main',
             'data=dead.data_reader:main',
         ],
     },
