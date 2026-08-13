@@ -22,12 +22,12 @@ def generate_launch_description():
         output='screen',
         parameters=[{'robot_description': robot_desc}]
     )
-    # brain_node=Node(
-    #         package='main',
-    #         executable='brain',
-    #         name='brain',
-    #         output='screen'
-    #     )
+    brain_node=Node(
+            package='dead',
+            executable='Otransform',
+            name='brain',
+            output='screen'
+        )
     
     data_node=Node(
             package='dead',
@@ -51,7 +51,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         rsp_node,
-        #brain_node,
+        brain_node,
         jsp_node,
         rviz_node,
         data_node,
