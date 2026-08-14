@@ -48,47 +48,6 @@
     </visual>
   </link>
 
-  <!-- <joint name="deadwheel_x_left" type="continuous">
-    <parent link="base_link"/>
-    <child link="deadwheel_x_one"/>
-    <origin xyz="0.0 -0.0965 -0.05" rpy="0 0 0"/>
-    <axis xyz="0 1 0"/>
-  </joint>
-
-  <joint name="deadwheel_x_right" type="continuous">
-    <parent link="base_link"/>
-    <child link="deadwheel_x_two"/>
-    <origin xyz="0.0 0.0965 -0.05" rpy="0 0 0"/>
-    <axis xyz="0 1 0"/>
-  </joint>
-
-  <joint name="deadwheel_y" type="continuous">
-    <parent link="base_link"/>
-    <child link="deadwheel_y_one"/>
-    <origin xyz="-0.065 0.0 -0.05" rpy="0 0 0"/>
-    <axis xyz="1 0 0"/>
-  </joint> -->
-
- <!-- <joint name="deadwheel_x_left" type="continuous">
-  <parent link="base_link"/>
-  <child link="deadwheel_x_one"/>
-  <origin xyz="0 -0.1275 -0.0795" rpy="0 0 0"/>
-  <axis xyz="0 1 0"/>
-</joint>
-
-<joint name="deadwheel_x_right" type="continuous">
-  <parent link="base_link"/>
-  <child link="deadwheel_x_two"/>
-  <origin xyz="0 0.1275 -0.0795" rpy="0 0 0"/>
-  <axis xyz="0 1 0"/>
-</joint>
-
-<joint name="deadwheel_y" type="continuous">
-  <parent link="base_link"/>
-  <child link="deadwheel_y_one"/>
-  <origin xyz="0.158 0 -0.0795" rpy="0 0 0"/>
-  <axis xyz="1 0 0"/>
-</joint> -->
 
 <joint name="deadwheel_x_left" type="continuous">
   <parent link="base_link"/>
