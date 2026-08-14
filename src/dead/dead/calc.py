@@ -1,7 +1,6 @@
 import math
 import rclpy
 from rclpy.node import Node
-
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import TransformStamped
 from std_msgs.msg import Float64MultiArray
@@ -31,10 +30,10 @@ class Brain(Node):
         self.n3 = 0.0
 
         # Robot constants
-        self.l = 0.193
-        self.b = 0.13
-        self.r = 0.055 / 2.0
-        self.c = 2.0 * math.pi * self.r / 2400.0
+        self.l = 0.255
+        self.b = 0.186
+        self.r = 0.059 / 2.0
+        self.c = 2.0 * math.pi * self.r / 3600.0
 
         # Publishers and Broadcasters
         self.odom_pub_ = self.create_publisher(Odometry, 'odom', 10)
@@ -91,6 +90,8 @@ class Brain(Node):
         self.n1 = msg.data[1]
         self.n2 = msg.data[0]
         self.n3 = -msg.data[2]
+
+    
 
 
 def main(args=None):

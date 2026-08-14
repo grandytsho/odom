@@ -16,7 +16,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.5708 0 0"/>
       <geometry>
-        <cylinder radius="0.025" length="0.0125"/>
+        <cylinder radius="0.0295" length="0.0125"/>
       </geometry>
       <material name="green">
         <color rgba="0.0 0.5 0.0 1.0"/>
@@ -28,7 +28,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.5708 0 0"/>
       <geometry>
-        <cylinder radius="0.025" length="0.0125"/>
+        <cylinder radius="0.0295" length="0.0125"/>
       </geometry>
       <material name="red">
         <color rgba="0.5 0.0 0.0 1.0"/>
@@ -40,7 +40,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 1.5708 0"/>
       <geometry>
-        <cylinder radius="0.025" length="0.0125"/>
+        <cylinder radius="0.0295" length="0.0125"/>
       </geometry>
       <material name="blue">
         <color rgba="0.0 0.0 0.5 1.0"/>
@@ -48,7 +48,7 @@
     </visual>
   </link>
 
-  <joint name="deadwheel_x_left" type="continuous">
+  <!-- <joint name="deadwheel_x_left" type="continuous">
     <parent link="base_link"/>
     <child link="deadwheel_x_one"/>
     <origin xyz="0.0 -0.0965 -0.05" rpy="0 0 0"/>
@@ -67,5 +67,48 @@
     <child link="deadwheel_y_one"/>
     <origin xyz="-0.065 0.0 -0.05" rpy="0 0 0"/>
     <axis xyz="1 0 0"/>
-  </joint>
+  </joint> -->
+
+ <!-- <joint name="deadwheel_x_left" type="continuous">
+  <parent link="base_link"/>
+  <child link="deadwheel_x_one"/>
+  <origin xyz="0 -0.1275 -0.0795" rpy="0 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+
+<joint name="deadwheel_x_right" type="continuous">
+  <parent link="base_link"/>
+  <child link="deadwheel_x_two"/>
+  <origin xyz="0 0.1275 -0.0795" rpy="0 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+
+<joint name="deadwheel_y" type="continuous">
+  <parent link="base_link"/>
+  <child link="deadwheel_y_one"/>
+  <origin xyz="0.158 0 -0.0795" rpy="0 0 0"/>
+  <axis xyz="1 0 0"/>
+</joint> -->
+
+<joint name="deadwheel_x_left" type="continuous">
+  <parent link="base_link"/>
+  <child link="deadwheel_x_one"/>
+  <origin xyz="0.093 -0.1275 -0.0795" rpy="0 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+
+<joint name="deadwheel_x_right" type="continuous">
+  <parent link="base_link"/>
+  <child link="deadwheel_x_two"/>
+  <origin xyz="0.093 0.1275 -0.0795" rpy="0 0 0"/>
+  <axis xyz="0 1 0"/>
+</joint>
+
+<joint name="deadwheel_y" type="continuous">
+  <parent link="base_link"/>
+  <child link="deadwheel_y_one"/>
+  <origin xyz="-0.093 0 -0.0795" rpy="0 0 0"/>
+  <axis xyz="1 0 0"/>
+</joint>
+
 </robot>
