@@ -7,7 +7,7 @@ import json
 class SerialBridge(Node):
     def __init__(self):
         super().__init__('serial_bridge')
-        self.publisher_ = self.create_publisher(Float64MultiArray, 'wheel_tick', 100)
+        self.publisher_ = self.create_publisher(Float64MultiArray, 'wheel_tick', 10)
         
         self.serial_port = '/dev/ttyACM0' 
         self.baud_rate = 115200
@@ -21,26 +21,20 @@ class SerialBridge(Node):
 
         self.timer = self.create_timer(0.01, self.read_serial_data)
 
+
+
     def read_serial_data(self):
-        if self.ser.in_waiting > 0:
+        while self.ser.in_waiting > 0:
             try:
                 line = self.ser.readline().decode('utf-8').strip()
-                
                 if line.startswith('E{'):
-                    clean_json_string = line[1:]
-                    
-                    data = json.loads(clean_json_string)
-
-                    n1 = float(data['a'])
-                    n2 = float(data['b'])
-                    n3 = float(data['c'])
-                    
+                    data = json.loads(line[1:])
+                    n1, n2, n3 = float(data['a']), float(data['b']), float(data['c'])
                     msg = Float64MultiArray()
                     msg.data = [n1, n2, n3]
                     self.publisher_.publish(msg)
-                    
-            except Exception as e:
-                pass 
+            except Exception:
+                continue
 
 def main(args=None):
     rclpy.init(args=args)

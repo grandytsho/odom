@@ -25,9 +25,9 @@ class Brain(Node):
         self.x_ = 0.0
         self.y_ = 0.0
         self.th_ = 0.0
-        self.c = 0.0
-        self.a = 0.0
-        self.b = 0.0
+        self.n1 = 0.0
+        self.n2 = 0.0
+        self.n3 = 0.0
 
         # Robot constants
         self.l = 0.255
@@ -36,7 +36,7 @@ class Brain(Node):
         self.c = 2.0 * math.pi * self.r / 3600.0
 
         # Publishers and Broadcasters
-        self.odom_pub_ = self.create_publisher(Odometry, 'odom', 100)
+        self.odom_pub_ = self.create_publisher(Odometry, 'odom', 10)
         self.tf_broadcaster_ = TransformBroadcaster(self)
         self.last_time_ = self.get_clock().now()
 
@@ -55,13 +55,13 @@ class Brain(Node):
         if len(msg.data) < 3:
             return
 
-        dc = msg.data[2] - self.c#left 
-        da = msg.data[0] - self.a #right
-        db = (-msg.data[1]) - self.b #lateral wheel
+        dn1 = msg.data[2] - self.n1 #right
+        dn2 = msg.data[0] - self.n2 #left
+        dn3 = (-msg.data[1]) - self.n3 #lateral
         
-        dx = self.c * (dc + da) / 2.0
-        dy = self.c * (db - (da - dc) * self.b / self.l)
-        dth = (self.c / self.l) * (da - dc)
+        dx = self.c * (dn1 + dn2) / 2.0
+        dy = self.c * (dn3 - (dn2 - dn1) * self.b / self.l)
+        dth = (self.c / self.l) * (dn2 - dn1)
 
         self.th_ = self.th_ + dth
         self.x_ = self.x_ + dx * math.cos(self.th_) - dy * math.sin(self.th_)
@@ -84,15 +84,14 @@ class Brain(Node):
 
         self.tf_broadcaster_.sendTransform(t)
 
-        self.get_logger().info(f"x={self.x_ * 100:.6f}, y={self.y_ * 100:.6f}, th={self.th_ * 180 / math.pi:.6f}")
-
+        self.get_logger().info(f"x={self.x_ * 100:.3f}, y={self.y_ * 100:.3f}, th={self.th_ * 180 / math.pi:.3f}, dn1={dn1:.3f}, dn2={dn2:.3f}, dn3={dn3:.3f}")
         self.last_time_ = current_time
-        self.c = msg.data[2]
-        self.a = msg.data[0]
-        self.b = -msg.data[1]
+        self.n1 = msg.data[2]
+        self.n2 = msg.data[0]
+        self.n3 = -msg.data[1]
+
 
     
-
 
 def main(args=None):
     rclpy.init(args=args)
