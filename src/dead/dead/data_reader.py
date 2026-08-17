@@ -7,7 +7,7 @@ import json
 class SerialBridge(Node):
     def __init__(self):
         super().__init__('serial_bridge')
-        self.publisher_ = self.create_publisher(Float64MultiArray, 'wheel_tick', 10)
+        self.publisher_ = self.create_publisher(Float64MultiArray, 'wheel_tick', 100)
         
         self.serial_port = '/dev/ttyACM0' 
         self.baud_rate = 115200
