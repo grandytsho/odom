@@ -28,7 +28,7 @@ class Brain(Node):
         self.n1 = 0.0
         self.n2 = 0.0
         self.n3 = 0.0
-
+       
         # Robot constants
         self.l = 0.255
         self.b = 0.186
@@ -58,6 +58,7 @@ class Brain(Node):
         dn1 = msg.data[2] - self.n1 #right
         dn2 = msg.data[0] - self.n2 #left
         dn3 = (msg.data[1]) - self.n3 #lateral
+
         
         dx = self.c * (dn1 + dn2) / 2.0
         dy = self.c * (dn3 - (dn2 - dn1) * self.b / self.l)
@@ -66,7 +67,6 @@ class Brain(Node):
         self.x_ = self.x_ + dx * math.cos(self.th_) - dy * math.sin(self.th_)
         self.y_ = self.y_ + dx * math.sin(self.th_) + dy * math.cos(self.th_)
         self.th_ = self.th_ + dth
-
         q = euler_to_quaternion(0, 0, self.th_)
 
         # Transform configuration
@@ -84,7 +84,8 @@ class Brain(Node):
 
         self.tf_broadcaster_.sendTransform(t)
 
-        self.get_logger().info(f"x={self.x_ * 100:.3f}, y={self.y_ * 100:.3f}, th={self.th_ * 180 / math.pi:.3f}, dn1={dn1:.3f}, dn2={dn2:.3f}, dn3={dn3:.3f}")
+        self.get_logger().info(f"x={self.x_ :.3f}, y={self.y_ :.3f}, th={self.th_ * 180 / math.pi:.3f}, ")#dn1={dn1:.3f}, dn2={dn2:.3f}, dn3={dn3:.3f}")
+        
         self.last_time_ = current_time
         self.n1 = msg.data[2]
         self.n2 = msg.data[0]
