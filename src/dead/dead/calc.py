@@ -60,8 +60,8 @@ class Brain(Node):
         dn3 = (-msg.data[1]) - self.n3 #lateral
 
         
-        dx = self.c * (dn1 + dn2) / 2.0
-        dy = self.c * (dn3 - (dn2 - dn1) * self.b / self.l)
+        dx = -self.c * (dn1 + dn2) / 2.0
+        dy = self.c * (dn3 - (dn1 - dn2) * self.b / self.l)
         dth = (self.c / self.l) * (dn2 - dn1)
        
         self.x_ = self.x_ + dx * math.cos(self.th_) - dy * math.sin(self.th_)
