@@ -57,7 +57,7 @@ class Brain(Node):
 
         dn1 = msg.data[2] - self.n1 #right
         dn2 = msg.data[0] - self.n2 #left
-        dn3 = (msg.data[1]) - self.n3 #lateral
+        dn3 = (-msg.data[1]) - self.n3 #lateral
 
         
         dx = self.c * (dn1 + dn2) / 2.0
@@ -89,7 +89,7 @@ class Brain(Node):
         self.last_time_ = current_time
         self.n1 = msg.data[2]
         self.n2 = msg.data[0]
-        self.n3 = msg.data[1]
+        self.n3 = -msg.data[1]
 
 
     
