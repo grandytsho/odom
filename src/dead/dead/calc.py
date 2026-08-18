@@ -33,7 +33,7 @@ class Brain(Node):
         self.l = 0.255
         self.b = 0.186
         self.r = 0.059 / 2.0
-        self.c = 2.0 * math.pi * self.r / 3600.0
+        self.c = 2.0 * math.pi * self.r / 2400.0
 
         # Publishers and Broadcasters
         self.odom_pub_ = self.create_publisher(Odometry, 'odom', 10)
@@ -57,15 +57,15 @@ class Brain(Node):
 
         dn1 = msg.data[2] - self.n1 #right
         dn2 = msg.data[0] - self.n2 #left
-        dn3 = (-msg.data[1]) - self.n3 #lateral
+        dn3 = (msg.data[1]) - self.n3 #lateral
         
         dx = self.c * (dn1 + dn2) / 2.0
         dy = self.c * (dn3 - (dn2 - dn1) * self.b / self.l)
         dth = (self.c / self.l) * (dn2 - dn1)
-
-        self.th_ = self.th_ + dth
+       
         self.x_ = self.x_ + dx * math.cos(self.th_) - dy * math.sin(self.th_)
         self.y_ = self.y_ + dx * math.sin(self.th_) + dy * math.cos(self.th_)
+        self.th_ = self.th_ + dth
 
         q = euler_to_quaternion(0, 0, self.th_)
 
@@ -88,7 +88,7 @@ class Brain(Node):
         self.last_time_ = current_time
         self.n1 = msg.data[2]
         self.n2 = msg.data[0]
-        self.n3 = -msg.data[1]
+        self.n3 = msg.data[1]
 
 
     

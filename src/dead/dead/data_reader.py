@@ -13,7 +13,7 @@ class SerialBridge(Node):
         self.baud_rate = 115200
         
         try:
-            self.ser = serial.Serial(self.serial_port, self.baud_rate, timeout=1.0)
+            self.ser = serial.Serial(self.serial_port, self.baud_rate, timeout=0.0)
             self.get_logger().info(f"Successfully connected to STM32 on {self.serial_port}")
         except Exception as e:
             self.get_logger().error(f"Failed to connect to STM32: {e}")
