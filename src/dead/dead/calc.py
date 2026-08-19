@@ -57,7 +57,7 @@ class Brain(Node):
 
         dn1 = msg.data[2] - self.n1 #right
         dn2 = msg.data[0] - self.n2 #left
-        dn3 = (-msg.data[1]) - self.n3 #lateral
+        dn3 = (-msg.data[1]) - self.n3 #lateralin
 
         
         dx = -self.c * (dn1 + dn2) / 2.0
