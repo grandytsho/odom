@@ -48,6 +48,13 @@ def generate_launch_description():
         name='rviz2',
         output='screen'
     )
+    
+    openloop_controller = Node(
+    package = 'dead', 
+    executable='open_loop',
+    name='open_loop1',
+    output='screen',
+    )
 
     return LaunchDescription([
         rsp_node,
@@ -55,4 +62,5 @@ def generate_launch_description():
         jsp_node,
         rviz_node,
         data_node,
+        openloop_controller,
     ])

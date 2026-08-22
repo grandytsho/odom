@@ -15,6 +15,7 @@ setup(
 
         #adding launch file to install
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
+         (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*'))),
         #adding urdf to launch file
         (os.path.join('share', package_name, 'urdf'), glob(os.path.join('urdf', '*.urdf'))),
     ],
@@ -33,6 +34,8 @@ setup(
         'console_scripts': [
             'Otransform= dead.calc:main',
             'data=dead.data_reader:main',
+            'open_loop= dead.openloop_controller:main',
         ],
     },
+    
 )
