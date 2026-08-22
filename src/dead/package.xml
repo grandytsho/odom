@@ -4,7 +4,7 @@
   <name>dead</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="grandytsho@gmail.com">yash</maintainer>
+  <maintainer email="navvu.jain@gmail.com">navya</maintainer>
   <license>Apache-2.0</license>
 
   <test_depend>ament_copyright</test_depend>
