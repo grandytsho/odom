@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': ['open_loop= motor.openloop_controller:main',
+        'publish= motor.publish_data:main',
         ],
     },
 )

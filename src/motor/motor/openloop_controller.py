@@ -138,10 +138,10 @@ class CmdvelToMcu(Node):
                 self.is_braking = False
 
             self.current_pwms = [ #mapping
-                -target_pwms[1], 
+                target_pwms[0], 
+                target_pwms[1],
                 target_pwms[2],
-                target_pwms[0],
-                -target_pwms[3]
+                target_pwms[3]
             ]
             self.send_pwm(self.current_pwms)
 
