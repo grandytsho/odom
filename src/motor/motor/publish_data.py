@@ -21,7 +21,6 @@ class SerialBridge(Node):
 
     def cb_serial(self, msg: String):
         if hasattr(self, 'ser') and self.ser.is_open:
-            # Append \r\n instead of just \n
             data_to_send = (msg.data + '\r\n').encode('utf-8')
             self.ser.write(data_to_send)
             self.ser.flush()  # Force OS buffer to flush immediately to hardware

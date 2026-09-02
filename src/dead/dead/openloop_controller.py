@@ -11,13 +11,13 @@ class CmdvelToMcu(Node):
         super().__init__('cmdvel_to_mcu')
 
         # --- Parameters ---
-        self.declare_parameter('wheel_L', 0.305)#half the length of base
-        self.declare_parameter('wheel_W', 0.2175)#half the width of base
+        self.declare_parameter('wheel_L', 0.265)#half the length of base #305
+        self.declare_parameter('wheel_W', 0.2555)#half the width of base #2175
         self.declare_parameter('max_pwm', 19)
-        self.declare_parameter('scale_factor', 100.0)
+        # self.declare_parameter('scale_factor', 100.0)
         self.declare_parameter('min_pwm_threshold_normal', 16)
         self.declare_parameter('min_pwm_threshold_strafe', 28)
-        self.declare_parameter('ramp_step', 12) 
+        # self.declare_parameter('ramp_step', 12) 
         self.declare_parameter('strafe_gain', 1.8) #strafing need to be powered, more driving force needed
         self.declare_parameter('idle_timeout', 0.05)
         self.declare_parameter('cmd_vel_in_topic', 'cmd_vel_out')
@@ -82,7 +82,8 @@ class CmdvelToMcu(Node):
         wz = -float(msg.angular.z)
 
         total_linear_mag = abs(raw_vx) + abs(raw_vy)
-        strafe_ratio = abs(raw_vy) / total_linear_mag if total_linear_mag >= 0.05 else 0.0
+        # strafe_ratio =0.0
+        strafe_ratio = abs(raw_vy) / total_linear_mag if total_linear_mag >= 0.08 else 0.0
         current_vy_gain = 1.0 + (strafe_ratio * (self.strafe_gain - 1.0))
         
         vx = raw_vx
@@ -95,6 +96,8 @@ class CmdvelToMcu(Node):
             vx + vy - wz * geom,
             vx - vy + wz * geom
         ]
+
+        
 
         active_min_pwm = self.min_normal + (strafe_ratio * (self.min_strafe - self.min_normal))
         normal_max = self.max_pwm
@@ -124,7 +127,6 @@ class CmdvelToMcu(Node):
             target_pwms.append(final_pwm)
 
         while len(target_pwms) < 4: target_pwms.append(0)
-
     
         if is_moving_command:
             # Detect if this is a point turn (no linear, yes angular)
