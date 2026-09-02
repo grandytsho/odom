@@ -62,5 +62,5 @@ def generate_launch_description():
         jsp_node,
         rviz_node,
         data_node,
-        openloop_controller,
+        # openloop_controller,
     ])
