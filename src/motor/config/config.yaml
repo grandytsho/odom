@@ -4,11 +4,11 @@ teleop_twist_joy_node:
       x: 1                  # Left Stick Up/Down (Forward/Backward)
       y: 0                  # Left Stick Left/Right (Strafe)
     scale_linear:
-      x: 0.09               # Max linear speed (m/s)
-      y: 0.09
+      x: 0.5            # Max linear speed (m/s)
+      y: 0.1
     axis_angular:
       yaw: 3                # Right Stick Left/Right (Point Turn)
     scale_angular:
-      yaw: 0.5
+      yaw: 0.3
     enable_axis: 2          # <-- Left Trigger (LT) used as Deadman switch
     require_enable_button: true

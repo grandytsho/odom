@@ -18,14 +18,14 @@ class CmdvelToMcu(Node):
         self.declare_parameter('min_pwm_threshold_normal', 16)
         self.declare_parameter('min_pwm_threshold_strafe', 28)
         self.declare_parameter('ramp_step', 12) 
-        self.declare_parameter('strafe_gain', 1.8) #strafing need to be powered, more driving force needed
+        self.declare_parameter('strafe_gain', 2.0) #strafing need to be powered, more driving force needed
         self.declare_parameter('idle_timeout', 0.05)
         self.declare_parameter('cmd_vel_in_topic', 'cmd_vel_out')
         self.declare_parameter('mcu_out_topic', 'mcu/out')
         
-        self.declare_parameter('brake_duration', 0.30)     #in seconds
-        self.declare_parameter('brake_pwm', 20)           # Standard brake PWM
-        self.declare_parameter('brake_pwm_rotation', 13)  # Smaller brake PWM for point turns
+        self.declare_parameter('brake_duration', 0.15)     #in seconds
+        self.declare_parameter('brake_pwm',10)           # Standard brake PWM #30
+        self.declare_parameter('brake_pwm_rotation', 10)  # Smaller brake PWM for point turns
 
         
         self.L = float(self.get_parameter('wheel_L').get_parameter_value().double_value)
