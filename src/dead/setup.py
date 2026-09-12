@@ -15,7 +15,7 @@ setup(
 
         #adding launch file to install
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
-         (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*'))),
+         (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*.yaml'))),
         #adding urdf to launch file
         (os.path.join('share', package_name, 'urdf'), glob(os.path.join('urdf', '*.urdf'))),
     ],

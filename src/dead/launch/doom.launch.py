@@ -13,6 +13,12 @@ def generate_launch_description():
         urdf_file
     )
 
+    config_path = os.path.join(
+            get_package_share_directory(pkg_name),
+            'config',
+            'ekf.yaml'
+        )
+
     with open(urdf_path, 'r') as infp:
         robot_desc = infp.read()
 
@@ -48,6 +54,14 @@ def generate_launch_description():
         name='rviz2',
         output='screen'
     )
+
+    ekf_node = Node(
+            package='robot_localization',
+            executable='ekf_node',
+            name='ekf',
+            output='screen', 
+            parameters=[config_path]
+        )
     
     openloop_controller = Node(
     package = 'dead', 
@@ -56,11 +70,26 @@ def generate_launch_description():
     output='screen',
     )
 
+    open_loop=Node(
+    package = 'motor',
+    executable='open_loop',
+    name='open_loop1',
+    output='screen',
+    )
+    static_tf_node = Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            arguments=['0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', 'base_link', 'imu_link']
+        )
+
     return LaunchDescription([
         rsp_node,
         brain_node,
         jsp_node,
         rviz_node,
         data_node,
+        ekf_node,
+        static_tf_node,
         # openloop_controller,
+        # open_loop,
     ])

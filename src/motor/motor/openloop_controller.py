@@ -13,16 +13,15 @@ class CmdvelToMcu(Node):
         # --- Parameters ---
         self.declare_parameter('wheel_L', 0.305)#half the length of base
         self.declare_parameter('wheel_W', 0.2175)#half the width of base
-        self.declare_parameter('max_pwm', 19)
-        self.declare_parameter('scale_factor', 100.0)
-        self.declare_parameter('min_pwm_threshold_normal', 16)
-        self.declare_parameter('min_pwm_threshold_strafe', 28)
-        self.declare_parameter('ramp_step', 12) 
-        self.declare_parameter('strafe_gain', 2.0) #strafing need to be powered, more driving force needed
+        self.declare_parameter('max_pwm', 200)
+        self.declare_parameter('scale_factor', 200.0)
+        self.declare_parameter('min_pwm_threshold_normal', 20)
+        self.declare_parameter('min_pwm_threshold_strafe', 140)
+        self.declare_parameter('ramp_step', 60) 
+        self.declare_parameter('strafe_gain', 2) #strafing need to be powered, more driving force needed
         self.declare_parameter('idle_timeout', 0.05)
         self.declare_parameter('cmd_vel_in_topic', 'cmd_vel_out')
         self.declare_parameter('mcu_out_topic', 'mcu/out')
-        
         self.declare_parameter('brake_duration', 0.15)     #in seconds
         self.declare_parameter('brake_pwm',10)           # Standard brake PWM #30
         self.declare_parameter('brake_pwm_rotation', 10)  # Smaller brake PWM for point turns
@@ -65,10 +64,7 @@ class CmdvelToMcu(Node):
 
     def send_pwm(self, pwms):  
         msg = {
-            "pwm1": int(pwms[0]),
-            "pwm2": int(pwms[1]),
-            "pwm3": int(pwms[2]),
-            "pwm4": int(pwms[3])
+           "pwm": [int(pwms[0]), int(pwms[1]),int(pwms[2]),int(pwms[3])]
         }
         out = String()
         out.data = json.dumps(msg)

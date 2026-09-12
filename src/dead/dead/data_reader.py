@@ -4,10 +4,22 @@ from std_msgs.msg import Float64MultiArray
 import serial
 import json  
 from std_msgs.msg import String
+from sensor_msgs.msg import Imu
+import math
+
+def yaw_to_quaternion(yaw_degrees):
+        yaw_rad = yaw_degrees * (math.pi / 180.0000)
+        qx = 0.0
+        qy = 0.0 #complete formulas have sin term for roll and pitch, but they are 0 for us, so we have this in 0 form.
+        qz = math.sin(yaw_rad / 2.0)
+        qw = math.cos(yaw_rad / 2.0)
+        return qx, qy, qz, qw
+
 class SerialBridge(Node):
     def __init__(self):
         super().__init__('serial_bridge')
         self.publisher_ = self.create_publisher(Float64MultiArray, 'wheel_tick', 10)
+        self.imu_pub = self.create_publisher(Imu, 'imu/data_raw', 10)
         
         self.serial_port = '/dev/ttyACM0' 
         self.baud_rate = 115200
@@ -22,18 +34,41 @@ class SerialBridge(Node):
         self.timer = self.create_timer(0.01, self.read_serial_data)
         self.sub = self.create_subscription(String, 'mcu/out', self.cb_serial, 10)
 
+    
+
     def read_serial_data(self):
         while self.ser.in_waiting > 0:
             try:
                 line = self.ser.readline().decode('utf-8').strip()
-                if line.startswith('E{'):
-                    data = json.loads(line[1:])
-                    n1, n2, n3 = float(data['a']), float(data['b']), float(data['c'])
+                if line.startswith('{'):
+                    data = json.loads(line)
+                    n1, n2, n3 = float(data['e1']), float(data['e2']), float(data['e3'])
                     msg = Float64MultiArray()
                     msg.data = [n1, n2, n3]
                     self.publisher_.publish(msg)
+
+                    if 'yaw' in data:
+                        imu_msg=Imu()
+                        imu_msg.header.stamp = self.get_clock().now().to_msg()
+                        imu_msg.header.frame_id = 'imu_link'
+                        qx, qy, qz, qw = yaw_to_quaternion(float(data['yaw']))
+                        imu_msg.orientation.x = qx
+                        imu_msg.orientation.y = qy
+                        imu_msg.orientation.z = qz  
+                        imu_msg.orientation.w = qw
+                        imu_msg.angular_velocity.x = 0.0
+                        imu_msg.angular_velocity.y = 0.0
+                        imu_msg.angular_velocity.z = 0.0
+                        imu_msg.angular_velocity_covariance[0] = -1.0     # tells robot_localization: not available
+                        imu_msg.linear_acceleration_covariance[0] = -1.0  # same, no accel yet
+                        imu_msg.orientation_covariance = [
+                            1e6, 0.0, 0.0,
+                            0.0, 1e6, 0.0,
+                            0.0, 0.0, 0.02   # yaw variance — only one that matters right now
+                        ]
+                        self.imu_pub.publish(imu_msg)
             except Exception:
-                continue
+                    continue
 
     def cb_serial(self, msg: String):
             if hasattr(self, 'ser') and self.ser.is_open:

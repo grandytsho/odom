@@ -36,7 +36,7 @@ class Brain(Node):
         self.c = 2.0 * math.pi * self.r / 2400.0
 
         # Publishers and Broadcasters
-        self.odom_pub_ = self.create_publisher(Odometry, 'odom', 10)
+        self.odom_pub_ = self.create_publisher(Odometry, 'odom_raw', 10)
         self.tf_broadcaster_ = TransformBroadcaster(self)
         self.last_time_ = self.get_clock().now()
 
@@ -55,14 +55,14 @@ class Brain(Node):
         if len(msg.data) < 3:
             return
 
-        dn1 = msg.data[2] - self.n1 #right
-        dn2 = msg.data[0] - self.n2 #left
-        dn3 = (-msg.data[1]) - self.n3 #lateral 
+        dn1 = -msg.data[1] - self.n1 #right
+        dn2 = msg.data[2] - self.n2 #left
+        dn3 = (-msg.data[0]) - self.n3 #lateral 
 
         
         dx = -self.c * (dn1 + dn2) / 2.0
         dy = self.c * (dn3 - (dn1 - dn2) * self.b / self.l)
-        dth = (self.c / self.l) * (dn2 - dn1)
+        dth = (self.c / self.l) * (-dn2 + dn1)
        
         self.x_ = self.x_ + dx * math.cos(self.th_) - dy * math.sin(self.th_)
         self.y_ = self.y_ + dx * math.sin(self.th_) + dy * math.cos(self.th_)
@@ -87,9 +87,9 @@ class Brain(Node):
         self.get_logger().info(f"x={self.x_ :.3f}, y={self.y_ :.3f}, th={self.th_ * 180 / math.pi:.3f}, ")#dn1={dn1:.3f}, dn2={dn2:.3f}, dn3={dn3:.3f}")
         
         self.last_time_ = current_time
-        self.n1 = msg.data[2]
-        self.n2 = msg.data[0]
-        self.n3 = -msg.data[1]
+        self.n1 = -msg.data[1]
+        self.n2 = msg.data[2]
+        self.n3 = -msg.data[0]
 
 
     
