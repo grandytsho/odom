@@ -13,12 +13,12 @@ class CmdvelToMcu(Node):
         # --- Parameters ---
         self.declare_parameter('wheel_L', 0.305)#half the length of base
         self.declare_parameter('wheel_W', 0.2175)#half the width of base
-        self.declare_parameter('max_pwm', 200)
-        self.declare_parameter('scale_factor', 200.0)
+        self.declare_parameter('max_pwm', 300)
+        self.declare_parameter('scale_factor', 400.0)
         self.declare_parameter('min_pwm_threshold_normal', 20)
         self.declare_parameter('min_pwm_threshold_strafe', 140)
         self.declare_parameter('ramp_step', 60) 
-        self.declare_parameter('strafe_gain', 2) #strafing need to be powered, more driving force needed
+        self.declare_parameter('strafe_gain', 5) #strafing need to be powered, more driving force needed
         self.declare_parameter('idle_timeout', 0.05)
         self.declare_parameter('cmd_vel_in_topic', 'cmd_vel_out')
         self.declare_parameter('mcu_out_topic', 'mcu/out')
@@ -86,10 +86,10 @@ class CmdvelToMcu(Node):
         geom = self.L + self.W
         
         target_speeds_ms = [
-            vx - vy - wz * geom,
             vx + vy + wz * geom,
-            vx + vy - wz * geom,
-            vx - vy + wz * geom
+            vx - vy - wz * geom,
+            vx - vy + wz * geom,
+            vx + vy - wz * geom
         ]
 
         active_min_pwm = self.min_normal + (strafe_ratio * (self.min_strafe - self.min_normal))
@@ -206,3 +206,5 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
+#holllllaaa, how are u              

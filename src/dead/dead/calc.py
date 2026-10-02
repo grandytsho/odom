@@ -84,7 +84,7 @@ class Brain(Node):
 
         self.tf_broadcaster_.sendTransform(t)
 
-        self.get_logger().info(f"x={self.x_ :.3f}, y={self.y_ :.3f}, th={self.th_ * 180 / math.pi:.3f}, ")#dn1={dn1:.3f}, dn2={dn2:.3f}, dn3={dn3:.3f}")
+        self.get_logger().info(f"x={self.x_ :.3f}, y={self.y_ :.3f}, th={(self.th_ * 180 / math.pi)%360:.3f}, ")#dn1={dn1:.3f}, dn2={dn2:.3f}, dn3={dn3:.3f}")
         
         self.last_time_ = current_time
         self.n1 = -msg.data[1]

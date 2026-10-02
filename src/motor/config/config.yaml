@@ -10,5 +10,9 @@ teleop_twist_joy_node:
       yaw: 3                # Right Stick Left/Right (Point Turn)
     scale_angular:
       yaw: 0.1
-    enable_axis: 2          # <-- Left Trigger (LT) used as Deadman switch
+    enable_button: 5        # <-- Left Trigger (LT) used as Deadman switch
     require_enable_button: true
+
+
+
+
