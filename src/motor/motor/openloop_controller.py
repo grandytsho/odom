@@ -13,19 +13,19 @@ class CmdvelToMcu(Node):
         # --- Parameters ---
         self.declare_parameter('wheel_L', 0.305)#half the length of base
         self.declare_parameter('wheel_W', 0.2175)#half the width of base
-        self.declare_parameter('max_pwm', 300)
+        self.declare_parameter('max_pwm', 550)
         self.declare_parameter('scale_factor', 400.0)
         self.declare_parameter('min_pwm_threshold_normal', 20)
         self.declare_parameter('min_pwm_threshold_strafe', 140)
         self.declare_parameter('ramp_step', 60) 
-        self.declare_parameter('strafe_gain', 5) #strafing need to be powered, more driving force needed
+        self.declare_parameter('strafe_gain', 1.0) #strafing need to be powered, more driving force needed
         self.declare_parameter('idle_timeout', 0.05)
         self.declare_parameter('cmd_vel_in_topic', 'cmd_vel_out')
         self.declare_parameter('mcu_out_topic', 'mcu/out')
         self.declare_parameter('brake_duration', 0.15)     #in seconds
         self.declare_parameter('brake_pwm',10)           # Standard brake PWM #30
         self.declare_parameter('brake_pwm_rotation', 10)  # Smaller brake PWM for point turns
-
+        self.declare_parameter('rotation_gain', 8.0) 
         
         self.L = float(self.get_parameter('wheel_L').get_parameter_value().double_value)
         self.W = float(self.get_parameter('wheel_W').get_parameter_value().double_value)
@@ -42,6 +42,9 @@ class CmdvelToMcu(Node):
 
         cmd_topic = self.get_parameter('cmd_vel_in_topic').get_parameter_value().string_value
         mcu_out_topic = self.get_parameter('mcu_out_topic').get_parameter_value().string_value
+
+        self.rotation_gain = float(self.get_parameter('rotation_gain').get_parameter_value().double_value)
+
 
         self.pub_mcu_out = self.create_publisher(String, mcu_out_topic, 10)
         self.sub_cmd = self.create_subscription(Twist, cmd_topic, self.cb_cmdvel, 20)
@@ -75,7 +78,7 @@ class CmdvelToMcu(Node):
         
         raw_vx = float(msg.linear.x)
         raw_vy = float(msg.linear.y)
-        wz = -float(msg.angular.z)
+        wz = -float(msg.angular.z)* self.rotation_gain
 
         total_linear_mag = abs(raw_vx) + abs(raw_vy)
         strafe_ratio = abs(raw_vy) / total_linear_mag if total_linear_mag >= 0.05 else 0.0
@@ -92,11 +95,11 @@ class CmdvelToMcu(Node):
             vx + vy - wz * geom
         ]
 
-        active_min_pwm = self.min_normal + (strafe_ratio * (self.min_strafe - self.min_normal))
+        active_min_pwm = self.min_normal + (strafe_ratio * (self.min_strafe - self.min_normal)) #finds the minimum pwm to start the motors
         normal_max = self.max_pwm
         strafe_max = self.max_pwm * self.strafe_gain
-        active_max_pwm = normal_max + (strafe_ratio * (strafe_max - normal_max))
-        NAV2_MAX_SPEED_MS = 0.09 
+        active_max_pwm = normal_max + (strafe_ratio * (strafe_max - normal_max)) #similarly maximum pwm to be used for the motors, based on strafe ratio. If strafe_ratio is 0, then max_pwm is used. If strafe_ratio is 1, then max_pwm*strafe_gain is used. In between, it linearly interpolates between the two.
+        NAV2_MAX_SPEED_MS = 1.5 #otherwise the speed ratio becomes 1, so speed naturally clips to 1 
 
         target_pwms = []
         is_moving_command = False
@@ -134,10 +137,10 @@ class CmdvelToMcu(Node):
                 self.is_braking = False
 
             self.current_pwms = [ #mapping
-                target_pwms[0], 
-                target_pwms[1],
-                target_pwms[2],
-                target_pwms[3]
+                target_pwms[1], 
+                target_pwms[0],
+                target_pwms[3],
+                target_pwms[2]
             ]
             self.send_pwm(self.current_pwms)
 

@@ -4,8 +4,8 @@ teleop_twist_joy_node:
       x: 1                  # Left Stick Up/Down (Forward/Backward)
       y: 0                  # Left Stick Left/Right (Strafe)
     scale_linear:
-      x: 0.5            # Max linear speed (m/s)
-      y: 0.8
+      x: 0.3            # Max linear speed (m/s)
+      y: 0.5
     axis_angular:
       yaw: 3                # Right Stick Left/Right (Point Turn)
     scale_angular:
