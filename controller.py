@@ -10,7 +10,7 @@ class CustomTeleopTwistJoy(Node):
         super().__init__('custom_teleop_twist_joy')
         
         # Publishers and Subscribers
-        self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
+        self.publisher_ = self.create_publisher(Twist, 'cmd_vel_out', 10)
         self.subscription = self.create_subscription(Joy, 'joy', self.joy_callback, 10)
 
         # ---- YOUR CONFIGURATION ----
@@ -19,9 +19,9 @@ class CustomTeleopTwistJoy(Node):
         self.axis_linear_y = 0     # Left Stick Left/Right
         self.axis_angular_yaw = 3  # Right Stick Left/Right
         
-        self.scale_linear_x = 0.09
-        self.scale_linear_y = 0.09
-        self.scale_angular_yaw = 0.5
+        self.scale_linear_x = 0.45
+        self.scale_linear_y = 0.5
+        self.scale_angular_yaw = 0.1
 
         # ---- DIAGONAL BUTTON CONFIG ----
         # xpadneo button mappings: 0=A, 1=B, 2=X, 3=Y, 4=LB, 5=RB

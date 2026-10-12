@@ -22,10 +22,10 @@ class SerialBridge(Node):
         self.imu_pub = self.create_publisher(Imu, 'imu/data_raw', 10)
         
         self.serial_port = '/dev/ttyACM0' 
-        self.baud_rate = 115200
+        self.baud_rate = 115200  
         
         try:
-            self.ser = serial.Serial(self.serial_port, self.baud_rate, timeout=0.1)
+            self.ser = serial.Serial(self.serial_port, self.baud_rate, timeout=0.0)
             self.get_logger().info(f"Successfully connected to STM32 on {self.serial_port}")
         except Exception as e:
             self.get_logger().error(f"Failed to connect to STM32: {e}")
@@ -42,10 +42,6 @@ class SerialBridge(Node):
                 line = self.ser.readline().decode('utf-8').strip()
                 if line.startswith('{'):
                     data = json.loads(line)
-                    n1, n2, n3 = float(data['e1']), float(data['e2']), float(data['e3'])
-                    msg = Float64MultiArray()
-                    msg.data = [n1, n2, n3]
-                    self.publisher_.publish(msg)
 
                     if 'yaw' in data:
                         imu_msg=Imu()
@@ -67,8 +63,14 @@ class SerialBridge(Node):
                             0.0, 0.0, 0.02   # yaw variance — only one that matters right now
                         ]
                         self.imu_pub.publish(imu_msg)
-            except Exception:
-                    continue
+
+
+                    t, n1, n2, n3 = float(data['t']), float(data['e1']), float(data['e2']), float(data['e3'])
+                    msg = Float64MultiArray()
+                    msg.data = [n1, n2, n3, t]
+                    self.publisher_.publish(msg)
+            except Exception as e:
+                self.get_logger().warn(f"serial error: {e}", throttle_duration_sec=1.0)
 
     def cb_serial(self, msg: String):
             if hasattr(self, 'ser') and self.ser.is_open:
